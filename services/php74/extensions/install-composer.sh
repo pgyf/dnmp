@@ -5,7 +5,7 @@
 supportLatest=$(php -r "echo version_compare(PHP_VERSION, '7.2.5', '>');")
 
 if [ "$supportLatest" -eq "1" ]; then
-    curl -o /usr/bin/composer https://mirrors.aliyun.com/composer/composer.phar \
+    curl -o /usr/bin/composer https://mirrors.tencent.com/composer/composer.phar \
     && chmod +x /usr/bin/composer
 else
     curl -o /tmp/composer-setup.php https://getcomposer.org/installer  \

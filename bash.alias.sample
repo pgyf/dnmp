@@ -1,13 +1,12 @@
 # dnmp alias
 alias dnginx='docker exec -it nginx /bin/sh'
-alias dphp='docker exec -it php /bin/sh'
-alias dphp56='docker exec -it php56 /bin/sh'
-alias dphp54='docker exec -it php54 /bin/sh'
+alias dphp74='docker exec -it php74 /bin/sh'
+alias dphp81='docker exec -it php81 /bin/sh'
 alias dmysql='docker exec -it mysql /bin/bash'
 alias dredis='docker exec -it redis /bin/sh'
 
-# php7 cli
-php () {
+# php7.4 cli
+php74 () {
     tty=
     tty -s && tty=--tty
     docker run \
@@ -16,11 +15,11 @@ php () {
         --rm \
         --volume $PWD:/www:rw \
         --workdir /www \
-        dnmp_php php "$@"
+        dnmp_php74 php "$@"
 }
 
-# php5.6 cli
-php56 () {
+# php8.1 cli
+php81 () {
     tty=
     tty -s && tty=--tty
     docker run \
@@ -29,24 +28,12 @@ php56 () {
         --rm \
         --volume $PWD:/www:rw \
         --workdir /www \
-        dnmp_php56 php "$@"
+        dnmp_php81 php "$@"
 }
 
-# php5.4 cli
-php54 () {
-    tty=
-    tty -s && tty=--tty
-    docker run \
-        $tty \
-        --interactive \
-        --rm \
-        --volume $PWD:/www:rw \
-        --workdir /www \
-        dnmp_php54 php "$@"
-}
 
-# php7 composer
-composer () {
+# php7.4 composer
+composer74 () {
     tty=
     tty -s && tty=--tty
     docker run \
@@ -57,11 +44,11 @@ composer () {
         --volume ~/dnmp/data/composer:/tmp/composer \
         --volume $(pwd):/app \
         --workdir /app \
-        dnmp_php composer "$@"
+        dnmp_php74 composer "$@"
 }
 
-# php5.6 composer
-composer56 () {
+# php8.1 composer
+composer81 () {
     tty=
     tty -s && tty=--tty
     docker run \
@@ -72,20 +59,5 @@ composer56 () {
         --volume ~/dnmp/data/composer:/tmp/composer \
         --volume $(pwd):/app \
         --workdir /app \
-        dnmp_php56 composer "$@"
-}
-
-# php5.4 composer
-composer54 () {
-    tty=
-    tty -s && tty=--tty
-    docker run \
-        $tty \
-        --interactive \
-        --rm \
-        --user www-data:www-data \
-        --volume ~/dnmp/data/composer:/tmp/composer \
-        --volume $(pwd):/app \
-        --workdir /app \
-        dnmp_php54 composer "$@"
+        dnmp_php81 composer "$@"
 }
