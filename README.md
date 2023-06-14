@@ -14,14 +14,14 @@ QQ交流群：
 DNMP项目特点：
 1. `100%`开源
 2. `100%`遵循Docker标准
-3. 支持**多版本PHP**共存，可任意切换（PHP5.4、PHP5.6、PHP7.1、PHP7.2、PHP7.3、PHP7.4、PHP8.0)
+3. 支持**多版本PHP**共存，可任意切换（PHP7.4、PHP8.1)
 4. 支持绑定**任意多个域名**
 5. 支持**HTTPS和HTTP/2**
 6. **PHP源代码、MySQL数据、配置文件、日志文件**都可在Host中直接修改查看
 7. 内置**完整PHP扩展安装**命令
 8. 默认支持`pdo_mysql`、`mysqli`、`mbstring`、`gd`、`curl`、`opcache`等常用热门扩展，根据环境灵活配置
 9. 可一键选配常用服务：
-    - 多PHP版本：PHP5.4、PHP5.6、PHP7.0-7.4、PHP8.0
+    - 多PHP版本：PHP7.4、PHP8.1
     - Web服务：Nginx、Openresty
     - 数据库：MySQL5、MySQL8、Redis、memcached、MongoDB、ElasticSearch
     - 消息队列：RabbitMQ
@@ -66,15 +66,15 @@ DNMP项目特点：
 ├── data                        数据库数据目录
 │   ├── esdata                  ElasticSearch 数据目录
 │   ├── mongo                   MongoDB 数据目录
-│   ├── mysql                   MySQL8 数据目录
+│   ├── mysql8                  MySQL8 数据目录
 │   └── mysql5                  MySQL5 数据目录
 ├── services                    服务构建文件和配置文件目录
 │   ├── elasticsearch           ElasticSearch 配置文件目录
-│   ├── mysql                   MySQL8 配置文件目录
+│   ├── mysql8                  MySQL8 配置文件目录
 │   ├── mysql5                  MySQL5 配置文件目录
 │   ├── nginx                   Nginx 配置文件目录
-│   ├── php                     PHP5.6 - PHP7.4 配置目录
-│   ├── php54                   PHP5.4 配置目录
+│   ├── php81                   PHP8.1 配置目录
+│   ├── php74                   PHP7.4 配置目录
 │   └── redis                   Redis 配置目录
 ├── logs                        日志目录
 ├── docker-compose.sample.yml   Docker 服务配置示例文件
@@ -111,17 +111,17 @@ DNMP项目特点：
 
 ## 3.PHP和扩展
 ### 3.1 切换Nginx使用的PHP版本
-首先，需要启动其他版本的PHP，比如PHP5.4，那就先在`docker-compose.yml`文件中删除PHP5.4前面的注释，再启动PHP5.4容器。
+首先，需要启动其他版本的PHP，比如PHP7.4，那就先在`docker-compose.yml`文件中删除PHP7.4前面的注释，再启动PHP7.4容器。
 
-PHP5.4启动后，打开Nginx 配置，修改`fastcgi_pass`的主机地址，由`php`改为`php54`，如下：
+PHP7.4启动后，打开Nginx 配置，修改`fastcgi_pass`的主机地址，由`php81`改为`php74`，如下：
 ```
-    fastcgi_pass   php:9000;
+    fastcgi_pass   php81:9000;
 ```
 为：
 ```
-    fastcgi_pass   php54:9000;
+    fastcgi_pass   php74:9000;
 ```
-其中 `php` 和 `php54` 是`docker-compose.yml`文件中服务器的名称。
+其中 `php74` 和 `php81` 是`docker-compose.yml`文件中服务器的名称。
 
 最后，**重启 Nginx** 生效。
 ```bash
@@ -136,12 +136,12 @@ PHP的很多功能都是通过扩展实现，而安装扩展是一个略费时�
 如果要安装更多扩展，请打开你的`.env`文件修改如下的PHP配置，
 增加需要的PHP扩展：
 ```bash
-PHP_EXTENSIONS=pdo_mysql,opcache,redis       # PHP 要安装的扩展列表，英文逗号隔开
-PHP54_EXTENSIONS=opcache,redis                 # PHP 5.4要安装的扩展列表，英文逗号隔开
+PHP81_EXTENSIONS=pdo_mysql,opcache,redis       # PHP 要安装的扩展列表，英文逗号隔开
+PHP74_EXTENSIONS=opcache,redis                 # PHP 7.4要安装的扩展列表，英文逗号隔开
 ```
 然后重新build PHP镜像。
 ```bash
-docker-compose build php
+docker-compose build php81
 ```
 可用的扩展请看同文件的`env.sample`注释块说明。
 
@@ -149,7 +149,7 @@ docker-compose build php
 1.进入容器:
 
 ```sh
-docker exec -it php /bin/sh
+docker exec -it php81 /bin/sh
 
 install-php-extensions apcu 
 ```
@@ -345,7 +345,7 @@ install-php-extensions apcu
 
 还有另外一种方式，就是进入容器，再执行`composer`命令，以PHP7容器为例：
 ```bash
-docker exec -it php /bin/sh
+docker exec -it php81 /bin/sh
 cd /www/localhost
 composer update
 ```
@@ -356,16 +356,16 @@ composer update
 ```bash
 $ docker-compose up                         # 创建并且启动所有容器
 $ docker-compose up -d                      # 创建并且后台运行方式启动所有容器
-$ docker-compose up nginx php mysql         # 创建并且启动nginx、php、mysql的多个容器
-$ docker-compose up -d nginx php  mysql     # 创建并且已后台运行的方式启动nginx、php、mysql容器
+$ docker-compose up nginx php81 mysql         # 创建并且启动nginx、php81、mysql的多个容器
+$ docker-compose up -d nginx php81  mysql     # 创建并且已后台运行的方式启动nginx、php81、mysql容器
 
 
-$ docker-compose start php                  # 启动服务
-$ docker-compose stop php                   # 停止服务
-$ docker-compose restart php                # 重启服务
-$ docker-compose build php                  # 构建或者重新构建服务
+$ docker-compose start php81                  # 启动服务
+$ docker-compose stop php81                   # 停止服务
+$ docker-compose restart php81                # 重启服务
+$ docker-compose build php81                  # 构建或者重新构建服务
 
-$ docker-compose rm php                     # 删除并且停止php容器
+$ docker-compose rm php81                     # 删除并且停止php容器
 $ docker-compose down                       # 停止并删除容器，网络，图像和挂载卷
 ```
 
@@ -377,14 +377,14 @@ $ docker-compose down                       # 停止并删除容器，网络，�
 $ docker ps           # 查看所有运行中的容器
 $ docker ps -a        # 所有容器
 ```
-输出的`NAMES`那一列就是容器的名称，如果使用默认配置，那么名称就是`nginx`、`php`、`php56`、`mysql`等。
+输出的`NAMES`那一列就是容器的名称，如果使用默认配置，那么名称就是`nginx`、`php81`、`php74`、`mysql`等。
 
 然后，打开`~/.bashrc`或者`~/.zshrc`文件，加上：
 ```bash
 alias dnginx='docker exec -it nginx /bin/sh'
 alias dphp='docker exec -it php /bin/sh'
-alias dphp56='docker exec -it php56 /bin/sh'
-alias dphp54='docker exec -it php54 /bin/sh'
+alias dphp81='docker exec -it php81 /bin/sh'
+alias dphp74='docker exec -it php74 /bin/sh'
 alias dmysql='docker exec -it mysql /bin/bash'
 alias dredis='docker exec -it redis /bin/sh'
 ```
