@@ -181,7 +181,7 @@ services:
 #          - default
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin:${PHPMYADMIN_VERSION}
     container_name: phpmyadmin
     ports:
       - "${PHPMYADMIN_HOST_PORT}:80"
