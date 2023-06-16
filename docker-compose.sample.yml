@@ -137,20 +137,36 @@ services:
 #    networks:
 #      - default
 
-  redis:
-    image: redis:${REDIS_VERSION}
-    container_name: redis
+  redis5:
+    image: redis:${REDIS5_VERSION}
+    container_name: redis5
     ports:
-      - "${REDIS_HOST_PORT}:6379"
+      - "${REDIS5_HOST_PORT}:6379"
     volumes:
-      - ${REDIS_CONF_FILE}:/etc/redis.conf:ro
-      - ${DATA_DIR}/redis:/data/:rw
+      - ${REDIS5_CONF_FILE}:/etc/redis.conf:ro
+      - ${DATA_DIR}/redis5:/data/:rw
     restart: always
     entrypoint: ["redis-server", "/etc/redis.conf"]
     environment:
       TZ: "$TZ"
     networks:
       - default
+      
+      
+#  redis6:
+#    image: redis:${REDIS6_VERSION}
+#    container_name: redis6
+#    ports:
+#      - "${REDIS6_HOST_PORT}:6379"
+#    volumes:
+#      - ${REDIS6_CONF_FILE}:/etc/redis.conf:ro
+#      - ${DATA_DIR}/redis6:/data/:rw
+#    restart: always
+#    entrypoint: ["redis-server", "/etc/redis.conf"]
+#    environment:
+#      TZ: "$TZ"
+#    networks:
+#      - default
 
 #  memcached:
 #    image: memcached:${MEMCACHED_VERSION}
