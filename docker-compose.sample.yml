@@ -226,6 +226,7 @@ services:
 #  mongodb:
 #    image: mongo:${MONGODB_VERSION}
 #    container_name: mongodb
+#    restart: always
 #    environment:
 #        MONGO_INITDB_ROOT_USERNAME: "${MONGODB_INITDB_ROOT_USERNAME}"
 #        MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_INITDB_ROOT_PASSWORD}"
